@@ -1,0 +1,7 @@
+name: Soda WissKI User Administration
+type: module
+description: Validates SSO OpenID Connect login data for WissKI groups.
+core_version_requirement: ^10.2 || ^11
+package: 'User authentication'
+dependencies:
+  - drupal:openid_connect
