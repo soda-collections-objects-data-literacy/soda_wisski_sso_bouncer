@@ -1,4 +1,4 @@
-name: Soda WissKI User Administration
+name: Soda WissKI SSO Bouncer
 type: module
 description: Validates SSO OpenID Connect login data for WissKI groups.
 core_version_requirement: ^10.2 || ^11

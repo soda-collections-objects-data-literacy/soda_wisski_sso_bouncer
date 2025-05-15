@@ -5,14 +5,10 @@
  * Provides SSO OpenID Connect login validation for WissKI groups.
  */
 
-use Drupal\user\UserInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Drupal\Core\Url;
-
 /**
  * Implements hook_openid_connect_pre_authorize().
  */
-function soda_wisski_user_administration_openid_connect_pre_authorize($account, array $context) {
+function soda_wisski_sso_bouncer_openid_connect_pre_authorize($account, array $context) {
   // Check if group information is provided in the userinfo data.
   if (isset($context['userinfo']['groups'])) {
     $userGroups = $context['userinfo']['groups'];
@@ -52,6 +48,6 @@ function soda_wisski_user_administration_openid_connect_pre_authorize($account, 
 /**
  * Implements hook_file_doc_comment().
  */
-function soda_wisski_user_administration_file_doc_comment() {
+function soda_wisski_sso_bouncer_file_doc_comment() {
   return 'Provides SSO OpenID Connect login validation for WissKI groups.';
 }
