@@ -5,21 +5,53 @@
  * Provides SSO OpenID Connect login validation for WissKI groups.
  */
 
-/**
- * Implements hook_openid_connect_authorize_alter().
- */
-function soda_wisski_user_administration_openid_connect_authorize_alter(array &$user_data, array $context) {
-  // Check if group information is provided in the user data.
-  if (isset($user_data['groups'])) {
-    $validGroups = ['wisski_admin'];
+use Drupal\user\UserInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Url;
 
-    // Add current site domain as valid group if it matches the pattern.
+/**
+ * Implements hook_openid_connect_pre_authorize().
+ */
+function soda_wisski_user_administration_openid_connect_pre_authorize($account, array $context) {
+  // Check if group information is provided in the userinfo data.
+  if (isset($context['userinfo']['groups'])) {
+    $userGroups = $context['userinfo']['groups'];
+
+    // Load OpenID Connect settings.
+    $config = \Drupal::config('openid_connect.settings');
+    $role_mappings = $config->get('role_mappings') ?? [];
+
+    // Get the client ID from the current domain.
     $currentDomain = \Drupal::request()->getHost();
+    $clientId = '';
     if (preg_match('/wisski-([\w-]+)\.wisski\.scs\.sammlungen\.io/', $currentDomain, $matches)) {
-      $validGroups[] = $matches[0];
+      $clientId = $matches[0];
     }
 
-    // Filter user groups to only include valid ones.
-    $user_data['groups'] = array_intersect($user_data['groups'], $validGroups);
+    // Get role mappings for this client if they exist.
+    $clientRoleMappings = $role_mappings[$clientId] ?? [];
+
+    // Check if user's group is in the allowed role mappings.
+    foreach ($userGroups as $userGroup) {
+      if (in_array($userGroup, $clientRoleMappings)) {
+        // User's group is allowed, proceed with user creation.
+        return TRUE;
+      }
+      else {
+        // User's group is not allowed, prevent user creation.
+        \Drupal::messenger()->addError(t('Access denied. Your group is not authorized to access this WissKI instance.'));
+        return FALSE;
+      }
+    }
   }
+
+  // If no groups info is available, deny the authorization.
+  return FALSE;
+}
+
+/**
+ * Implements hook_file_doc_comment().
+ */
+function soda_wisski_user_administration_file_doc_comment() {
+  return 'Provides SSO OpenID Connect login validation for WissKI groups.';
 }
