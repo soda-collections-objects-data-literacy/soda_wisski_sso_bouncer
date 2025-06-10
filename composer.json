@@ -10,8 +10,5 @@
       "name": "Robert Nasarek",
       "email": "robert@nasarek.dev"
     }
-  ],
-  "require": {
-    "drupal/openid_connect": "dev-3516375-implement-drush-commands"
-  }
+  ]
 }
