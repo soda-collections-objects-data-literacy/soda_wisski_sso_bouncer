@@ -1,0 +1,17 @@
+{
+  "name": "soda-collection-objects-data-literacy/soda_wisski_sso_bouncer",
+  "type": "drupal-module",
+  "description": "SSO Bouncer for WissKI",
+  "keywords": ["Drupal", "WissKI", "SSO", "OpenID Connect", "SODa SCS"],
+  "license": "GPL-2.0+",
+  "homepage": "https://github.com/soda-collections-objects-data-literacy/soda_wisski_sso_bouncer",
+  "authors": [
+    {
+      "name": "Robert Nasarek",
+      "email": "robert@nasarek.dev"
+    }
+  ],
+  "require": {
+    "drupal/openid_connect": "dev-3516375-implement-drush-commands"
+  }
+}
